@@ -39,3 +39,14 @@
 
 # debug information files
 *.dwo
+
+###
+
+# os specific files
+.DS_Store
+
+# build folders
+build/
+
+# vs code settings only
+.vscode/settings.json
