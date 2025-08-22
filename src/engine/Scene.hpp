@@ -8,7 +8,7 @@
 #include <deque>
 
 #include "IScene.hpp"
-
+#include "BinaryPositionEncoder.hpp"
 #include "Object.hpp"
 #include "Timer.hpp"
 
@@ -22,12 +22,10 @@ namespace engine
     class Scene : public IScene
     {
     private:
-        sf::RenderWindow window;
-
-        std::vector<engine::Object> objects;
-
+        sf::RenderWindow m_window;
+        std::vector<engine::Object> m_objects;
         sf::Font debugFont;
-        int lastIndex;
+        lib::BinaryPositionEncoder m_encoder;
 
     public:
         Scene() = delete;
@@ -42,5 +40,6 @@ namespace engine
         bool isPointOutsideWindow(const lib::Vector2M &p) const override;
 
         std::vector<std::unique_ptr<sf::Drawable>> __debugDrawables;
+        void __addDebugDrawables(std::unique_ptr<sf::Drawable> item) override;
     };
 }

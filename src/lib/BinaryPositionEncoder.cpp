@@ -1,16 +1,23 @@
 #include "BinaryPositionEncoder.hpp"
 
-lib::BinaryPositionEncoder::BinaryPositionEncoder(const sf::Vector2u &windowSize, engine::Scene *__scene)
+lib::BinaryPositionEncoder::BinaryPositionEncoder(const sf::Vector2u &windowSize, engine::IScene *__scene)
     : windowX(windowSize.x), windowY(windowSize.y), __scene(__scene)
 {
 }
 
 uint16_t lib::BinaryPositionEncoder::getEncoded(const lib::Vector2M &point)
 {
+    // optimized away by compiler
+    enum class Direction : bool
+    {
+        Vertical = true,
+        Horizontal = false
+    };
+
     uint16_t result;
 
     // first check vertical direction; first bit is vertical
-    lib::Direction nextDir(Direction::Vertical);
+    Direction nextDir(Direction::Vertical);
 
     lib::RectArea searchRect;
     searchRect.size = lib::Vector2M(
@@ -64,6 +71,8 @@ uint16_t lib::BinaryPositionEncoder::getEncoded(const lib::Vector2M &point)
         };
 
         // DEBUG ONLY; will be removed by compiler automatically (i think)
+
+        // construct on the heap will be deleted after drawn by the scene
         std::unique_ptr<sf::RectangleShape> __drawRect = std::make_unique<sf::RectangleShape>();
         __drawRect->setFillColor(sf::Color::Transparent);
         __drawRect->setOutlineColor(sf::Color::Magenta);
@@ -74,7 +83,9 @@ uint16_t lib::BinaryPositionEncoder::getEncoded(const lib::Vector2M &point)
         __drawRect->setSize(searchRect.size * 2);
 
         if (__scene)
-            __scene->__debugDrawables.push_back(std::move(__drawRect));
+            __scene->__addDebugDrawables(std::move(__drawRect));
+            // using std::move because copy constructor of unique_ptr is deleted
+            // without std::move item is passed in by value we want to just move it
     }
 
     return result;

@@ -18,5 +18,7 @@ namespace engine
         // = 0 implies that defination will be provided in overridden class
         virtual sf::RenderWindow &getWindow() = 0;
         virtual bool isPointOutsideWindow(const lib::Vector2M &p) const = 0;
+
+        virtual void __addDebugDrawables(std::unique_ptr<sf::Drawable> item) = 0;
     };
 }

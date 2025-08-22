@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <stdexcept>
 
-#include "Scene.hpp"
+#include "IScene.hpp"
 
 #include "Helpers.hpp"
 #include "RectArea.hpp"
@@ -13,12 +13,6 @@
 
 namespace lib
 {
-    enum class Direction : bool
-    {
-        Vertical = true,
-        Horizontal = false
-    };
-
     // When Decoding what point of rect is given
     enum class DecodeType
     {
@@ -33,7 +27,7 @@ namespace lib
         /// @brief Used to initialize the encoder with a specific window size
         /// @param windowSize Takes in `const sf::Vector2u&` and x, y internally
         /// @param __scene (optional) DEBUG ONLY parameter; specifies what scene to draw the quadrant rects on.
-        BinaryPositionEncoder(const sf::Vector2u &windowSize, engine::Scene *__scene = nullptr);
+        BinaryPositionEncoder(const sf::Vector2u &windowSize, engine::IScene *__scene = nullptr);
 
     public:
         BinaryPositionEncoder() = delete;
@@ -77,7 +71,7 @@ namespace lib
         DecodeType decodeType = DecodeType::TopLeft;
 
         // DEBUG ONLY; will be removed by compiler automatically (i think)
-        engine::Scene *__scene = nullptr;
+        engine::IScene *__scene = nullptr;
         std::vector<lib::RectArea> __drawAreas;
 
     private:
