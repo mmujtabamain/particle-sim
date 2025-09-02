@@ -47,6 +47,3 @@
 
 # build folders
 build/
-
-# vs code settings only
-.vscode/settings.json

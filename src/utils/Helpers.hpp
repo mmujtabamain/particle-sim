@@ -70,9 +70,8 @@ namespace utils
     }
 
     template <typename T>
-    inline void drawPoint(const sf::Vector2<T> &p, sf::RenderWindow &win)
+    inline void drawPoint(const sf::Vector2<T> &p, sf::RenderWindow &win, float radius = 5.f)
     {
-        const float radius = 5;
         sf::CircleShape shape(radius);
 
         shape.setFillColor(sf::Color::Yellow);
