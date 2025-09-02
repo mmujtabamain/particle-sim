@@ -11,6 +11,11 @@
 
 #include "_macros.hpp"
 
+namespace engine
+{
+    class IScene;
+}
+
 namespace lib
 {
     // When Decoding what point of rect is given
@@ -28,39 +33,40 @@ namespace lib
         /// @param windowSize Takes in `const sf::Vector2u&` and x, y internally
         /// @param __scene (optional) DEBUG ONLY parameter; specifies what scene to draw the quadrant rects on.
         BinaryPositionEncoder(const sf::Vector2u &windowSize, engine::IScene *__scene = nullptr);
+        // __scene is taken by raw pointer as we only need reference and it can be optional
 
     public:
         BinaryPositionEncoder() = delete;
 
         /* @brief Encodes the position of a point on a screen to a seperate quadrants of the screen
-        * in binary, can be used to determined how close objects are to each other.
-        * 
-        * Works by manipulating the bits of `uint16_t` (2 bytes). Following algorithm is used to fill bits from left to right:
-        * 
-        * - Set `searchRect` to (windowSize.x / 2, windowSize.y / 2)
-        * 
-        * - If point is left of searchRect.x (vertical line check); append 1 if true else 0
-        * 
-        * - Shrink searchRect in x direction
-        * 
-        * - If point is below of searchRect.y (horizontal line check); append 1 if true else 0
-        * 
-        * - Shrink searchRect in y direction
-        * 
-        * - Move searchRect to next quadrant and goto Step 2
-        * 
-        * - Repeat above step until all bits are fill
-        * 
-        * Leftmost bits are of bigger quadrants
-        * while Rightmost bits are for close quadrants.
-        * 
-        * ---
-        * 
-        * Depends on the window size being constant; thus it is initalized by creating an instance of class `lib::BinaryPositionEncoder`.
-        * @param point The point to encode
-        * @return `uint16_t` with bits manipulated to resemble the address in binary.
-        */
-        uint16_t getEncoded(const lib::Vector2M &point);
+         * in binary, can be used to determined how close objects are to each other.
+         *
+         * Works by manipulating the bits of `uint16_t` (2 bytes). Following algorithm is used to fill bits from left to right:
+         *
+         * - Set `searchRect` to (windowSize.x / 2, windowSize.y / 2)
+         *
+         * - If point is left of searchRect.x (vertical line check); append 1 if true else 0
+         *
+         * - Shrink searchRect in x direction
+         *
+         * - If point is below of searchRect.y (horizontal line check); append 1 if true else 0
+         *
+         * - Shrink searchRect in y direction
+         *
+         * - Move searchRect to next quadrant and goto Step 2
+         *
+         * - Repeat above step until all bits are fill
+         *
+         * Leftmost bits are of bigger quadrants
+         * while Rightmost bits are for close quadrants.
+         *
+         * ---
+         *
+         * Depends on the window size being constant; thus it is initalized by creating an instance of class `lib::BinaryPositionEncoder`.
+         * @param point The point to encode
+         * @return `uint16_t` with bits manipulated to resemble the address in binary.
+         */
+        uint16_t getEncoded(const lib::Vector2M &point) const;
 
         /// @brief ! Current not working correctly !
         /// @param addr the encoded bit address
@@ -77,7 +83,7 @@ namespace lib
     private:
         static constexpr size_t NUM_BITS = sizeof(uint16_t) * 8;
 
-        unsigned int windowX, windowY;
+        const unsigned int windowX, windowY;
     };
 
     // Add bits from right to left

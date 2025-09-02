@@ -11,20 +11,19 @@ engine::Scene::Scene(const sf::Vector2u &size)
     m_window = sf::RenderWindow(sf::VideoMode(size), "Particle Simulation", sf::Style::Close, sf::State::Windowed, settings);
     m_objects.reserve(128);
 
-    m_window.setFramerateLimit(60);
+    // m_window.setFramerateLimit(60);
     // m_window.setVerticalSyncEnabled(true);
 }
 
 void engine::Scene::startLoop()
 {
     sf::Clock deltaClock;
-    sf::Clock __fpsClock;
 
+    sf::Clock __fpsClock;
     sf::Text __fpsText(debugFont);
     __fpsText.setPosition({15, 10});
     __fpsText.setCharacterSize(20);
     __fpsText.setFillColor(sf::Color::White);
-
     std::deque<float> __frameTimes;
     const size_t __FRAMES_SAMPLES = 60;
 
@@ -72,13 +71,7 @@ void engine::Scene::startLoop()
         {
             lib::BinaryPositionEncoder encoder(m_window.getSize(), this);
 
-            std::cout << "Encoder: " << std::bitset<16>(encoder.getEncoded(mousePos)) << "\n";
-        }
-
-        for (auto &obj : m_objects)
-        {
-            obj.update(dt);
-            obj.draw(m_window);
+            std::cout << "Mouse Pos Encoded: " << std::bitset<16>(encoder.getEncoded(mousePos)) << "\n";
         }
 
 #if DEBUG == 1
@@ -89,8 +82,14 @@ void engine::Scene::startLoop()
 
         __debugDrawables.clear();
 
-        m_window.draw(__fpsText);
 #endif // DEBUG
+        m_window.draw(__fpsText);
+
+        for (auto &obj : m_objects)
+        {
+            obj.update(dt);
+            obj.draw(m_window);
+        }
 
         m_window.display();
     }
@@ -141,6 +140,11 @@ bool engine::Scene::isPointOutsideWindow(const lib::Vector2M &p) const
     }
 
     return false;
+}
+
+const lib::BinaryPositionEncoder &engine::Scene::getBPE()
+{
+    return m_encoder;
 }
 
 void engine::Scene::__addDebugDrawables(std::unique_ptr<sf::Drawable> item)

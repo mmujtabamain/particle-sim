@@ -5,7 +5,7 @@ lib::BinaryPositionEncoder::BinaryPositionEncoder(const sf::Vector2u &windowSize
 {
 }
 
-uint16_t lib::BinaryPositionEncoder::getEncoded(const lib::Vector2M &point)
+uint16_t lib::BinaryPositionEncoder::getEncoded(const lib::Vector2M &point) const
 {
     // optimized away by compiler
     enum class Direction : bool

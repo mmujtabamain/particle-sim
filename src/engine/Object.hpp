@@ -19,26 +19,31 @@ namespace engine
 
     class Object
     {
-    private:
-        sf::CircleShape shape;
-        ObjectState currentFrameState;
+    private: // PRIVATE MEMBERS
+        // at the end of every frame th
+        ObjectState currentState;
 
         engine::IScene &myScene;
         sf::RenderWindow &windowRO;
 
-    public:
-        Object(engine::IScene &scene, float radius = 5);
+        uint16_t encodedPosition;
 
-        sf::Vector2f getCenter() const;
-        const sf::Vector2f &getVelocity() const;
+    public: // GETTERS AND SETTERS
+        const sf::Vector2f &getPosition(bool fromCenter = true);
+        const sf::Vector2f &getVelocity();
         float getRadius() const;
 
-        void setPosition(const sf::Vector2f &newPos);
+        void setPosition(const sf::Vector2f &newPos, bool fromCenter = true);
         void setVelocity(const sf::Vector2f &newVel);
+
+    public: // PUBLIC METHODS
+        sf::CircleShape shape;
+
+        Object(engine::IScene &scene, float radius = 5);
 
         void draw(sf::RenderWindow &window);
         void update(float dt);
 
-        void physicsLoop(float dt);
+    private: // PRIVATE METHODS
     };
 }
