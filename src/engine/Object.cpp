@@ -4,12 +4,15 @@
 #include "Helpers.hpp"
 
 engine::Object::Object(engine::IScene &scene, float radius)
-    : m_shape(radius), m_Scene(scene), m_ro_windowRO(scene.GetWindow())
+    : m_shape(radius), m_Scene(scene), m_window(scene.GetWindow()), m_ro_window(scene.GetWindow())
 {
     m_shape.setFillColor(sf::Color::Green);
     m_shape.setOrigin({0.f, 0.f});
     m_shape.setOutlineThickness(4);
     m_shape.setOutlineColor(sf::Color::Black);
+
+    setVelocity({0, 100});
+    setAcceleration({0, -50});
 }
 
 // MARK: GETTERS AND SETTERS
@@ -45,9 +48,21 @@ const sf::Vector2f &engine::Object::getVelocity()
     return m_passedState.velocity;
 }
 
+/// @brief Set the velocity for upcoming frame
+/// @param newVel New velocity
 void engine::Object::setVelocity(const sf::Vector2f &newVel)
 {
     m_upcomingState.velocity = newVel;
+}
+
+const sf::Vector2f &engine::Object::getAcceleration()
+{
+    return m_passedState.acceleration;
+}
+
+void engine::Object::setAcceleration(const sf::Vector2f &newAcc)
+{
+    m_upcomingState.acceleration = newAcc;
 }
 
 // MARK: PUBLIC METHODS
@@ -77,6 +92,14 @@ applyState(); // applies data from m_upcomingState to m_shape
 void engine::Object::updateState()
 {
     m_passedState.position = getPosition();
+
+    // pass upcoming state into passed state (upcoming state has been resovled)
+    m_passedState.velocity = m_upcomingState.velocity;
+    m_passedState.acceleration = m_upcomingState.acceleration;
+    // clear upcoming state
+    m_upcomingState.position = utils::zeroVector2f;
+    m_upcomingState.velocity = utils::zeroVector2f;
+    m_upcomingState.acceleration = utils::zeroVector2f;
 }
 
 void engine::Object::applyState()
@@ -88,13 +111,23 @@ void engine::Object::applyState()
 
 void engine::Object::update(float dt)
 {
-    // m_encodedPosition = m_Scene.GetBPE().getEncoded(m_shape.getPosition() + m_shape.getRadius());
+    m_encodedPosition = m_Scene.GetBPE().getEncoded(getPosition());
 
     updateState();
 
     // m_upcomingState.position = m_passedState.position;
-    m_upcomingState.position = m_passedState.position + (m_passedState.velocity * dt);
-    m_upcomingState.velocity = m_passedState.velocity + m_passedState.acceleration * dt;
+    utils::printVector("PS Pos", m_passedState.position);
+    utils::printVector("PS Vel", m_passedState.velocity);
+    utils::printVector("PS Acl", m_passedState.acceleration);
+    PRINT("---------------------");
+    utils::printVector("US Pos", m_upcomingState.position);
+    utils::printVector("PS Vel", m_passedState.velocity);
+    utils::printVector("US Acl", m_upcomingState.acceleration);
+    PRINT("=====================");
+
+    m_upcomingState.acceleration = m_passedState.acceleration;
+    m_upcomingState.velocity = m_passedState.velocity + m_upcomingState.acceleration * dt;
+    m_upcomingState.position = m_passedState.position + m_upcomingState.velocity * dt;
 
     applyState();
 }

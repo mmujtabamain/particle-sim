@@ -192,6 +192,10 @@ namespace utils
         win.draw(line);
         win.draw(arrow);
     }
+
+    constexpr static sf::Vector2f zeroVector2f = {0, 0};
+    constexpr static sf::Vector2u zeroVector2u = {0, 0};
+    constexpr static sf::Vector2i zeroVector2i = {0, 0};
 }
 
 namespace sf

@@ -26,9 +26,10 @@ namespace engine
         ObjectState m_upcomingState;
 
         sf::CircleShape m_shape;
-        const sf::RenderWindow &m_ro_windowRO;
 
         engine::IScene &m_Scene;
+        sf::RenderWindow &m_window;
+        const sf::RenderWindow &m_ro_window;
 
         uint16_t m_encodedPosition;
 
@@ -42,6 +43,9 @@ namespace engine
 
         const sf::Vector2f &getVelocity();
         void setVelocity(const sf::Vector2f &newVel);
+
+        const sf::Vector2f &getAcceleration();
+        void setAcceleration(const sf::Vector2f &newAcc);
 
     private: // PRIVATE METHODS
         void updateState();

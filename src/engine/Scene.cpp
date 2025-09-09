@@ -11,7 +11,7 @@ engine::Scene::Scene(const sf::Vector2u &size)
     m_window = sf::RenderWindow(sf::VideoMode(size), "Particle Simulation", sf::Style::Close, sf::State::Windowed, settings);
     m_objects.reserve(128);
 
-    m_window.setFramerateLimit(5);
+    // m_window.setFramerateLimit(5);
     // m_window.setVerticalSyncEnabled(true);
 }
 
