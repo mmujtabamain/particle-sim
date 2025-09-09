@@ -19,6 +19,15 @@ namespace engine
     // public IScene implies Scene = IScene
     // allows other classes to refer to Scene as IScene instead of Scene
 
+    enum class PointOutsideLocation : int
+    {
+        Inside = 0,
+        XPlus = 1,
+        XMinus = 2,
+        YPlus = 3,
+        YMinus = 4
+    };
+
     class Scene : public IScene
     {
     private:
@@ -37,7 +46,7 @@ namespace engine
         void ObjectsForEach(const std::function<void(engine::Object &)> &func);
 
         sf::RenderWindow &GetWindow() override;
-        bool IsPointOutsideWindow(const lib::Vector2M &p) const override;
+        PointOutsideLocation GetOutsideLocation(const lib::Vector2M &p, int padding) const override;
 
         const lib::BinaryPositionEncoder &GetBPE() override;
 

@@ -13,7 +13,9 @@ int main()
             scene.GetWindow().getSize().x / 2.f,
             scene.GetWindow().getSize().y / 2.f //
         });
-        // obj.move(utils::getRandomVector(200, i));
+        obj.move(utils::getRandomVector(200, i));
+        obj.setVelocity(utils::getRandomVector(200, i));
+        obj.setAcceleration({0, 1000});
         scene.AddObject(obj);
     }
 

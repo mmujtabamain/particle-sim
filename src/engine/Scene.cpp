@@ -120,26 +120,25 @@ sf::RenderWindow &engine::Scene::GetWindow()
     return m_window;
 }
 
-bool engine::Scene::IsPointOutsideWindow(const lib::Vector2M &p) const
+engine::PointOutsideLocation engine::Scene::GetOutsideLocation(const lib::Vector2M &p, int padding) const
 {
-    if (p.x < 0)
+    if (p.x < padding)
     {
-        return true;
+        return PointOutsideLocation::XMinus;
     }
-    else if (p.y < 0)
+    else if (p.y < padding)
     {
-        return true;
+        return PointOutsideLocation::YMinus;
     }
-    else if (p.x > m_window.getSize().x)
+    else if (p.x > m_window.getSize().x - padding)
     {
-        return true;
+        return PointOutsideLocation::XPlus;
     }
-    else if (p.y > m_window.getSize().y)
+    else if (p.y > m_window.getSize().y - padding)
     {
-        return true;
+        return PointOutsideLocation::YPlus;
     }
-
-    return false;
+    return PointOutsideLocation::Inside;
 }
 
 const lib::BinaryPositionEncoder &engine::Scene::GetBPE()

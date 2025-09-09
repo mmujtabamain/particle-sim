@@ -20,9 +20,9 @@ namespace engine
     class Object
     {
     private: // PRIVATE MEMBERS
-        /// @brief State of previous frame
+        /// @brief State of `previous` frame
         ObjectState m_passedState;
-        /// @brief State of upcoming frame
+        /// @brief State of `upcoming` frame
         ObjectState m_upcomingState;
 
         sf::CircleShape m_shape;
@@ -48,11 +48,11 @@ namespace engine
         void setAcceleration(const sf::Vector2f &newAcc);
 
     private: // PRIVATE METHODS
-        void updateState();
+        void setupState();
         void applyState();
 
     public: // PUBLIC METHODS
-        Object(engine::IScene &scene, float radius = 2);
+        Object(engine::IScene &scene, float radius = 5);
 
         void move(const sf::Vector2f &relativePos, bool fromCenter = true);
 

@@ -12,6 +12,8 @@ namespace lib
 
 namespace engine
 {
+    enum class PointOutsideLocation;
+
     /// @brief Interface to be used by `engine::Object`
     class IScene
     {
@@ -23,7 +25,7 @@ namespace engine
 
         // = 0 implies that defination will be provided in overridden class
         virtual sf::RenderWindow &GetWindow() = 0;
-        virtual bool IsPointOutsideWindow(const lib::Vector2M &p) const = 0;
+        virtual PointOutsideLocation GetOutsideLocation(const lib::Vector2M &p, int padding = 0) const = 0;
 
         virtual const lib::BinaryPositionEncoder &GetBPE() = 0;
 

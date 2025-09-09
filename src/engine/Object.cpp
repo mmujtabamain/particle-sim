@@ -10,9 +10,6 @@ engine::Object::Object(engine::IScene &scene, float radius)
     m_shape.setOrigin({0.f, 0.f});
     m_shape.setOutlineThickness(4);
     m_shape.setOutlineColor(sf::Color::Black);
-
-    setVelocity({0, 100});
-    setAcceleration({0, -50});
 }
 
 // MARK: GETTERS AND SETTERS
@@ -69,7 +66,7 @@ void engine::Object::setAcceleration(const sf::Vector2f &newAcc)
 
 void engine::Object::move(const sf::Vector2f &relativePos, bool fromCenter)
 {
-    // setPosition(getPosition(fromCenter) + relativePos, fromCenter);
+    setPosition(getPosition(fromCenter) + relativePos, fromCenter);
 }
 
 void engine::Object::draw(sf::RenderWindow &window)
@@ -81,7 +78,7 @@ void engine::Object::draw(sf::RenderWindow &window)
 /*
 Usage:
 ```cpp
-updateState(); // stores data in m_passedState from m_shape
+setupState(); // stores data in m_passedState from m_shape
 
 // apply state transformation to m_upcomingState
 
@@ -89,10 +86,10 @@ applyState(); // applies data from m_upcomingState to m_shape
 ```
 */
 
-void engine::Object::updateState()
+void engine::Object::setupState()
 {
+    // getPosition for accurate position
     m_passedState.position = getPosition();
-
     // pass upcoming state into passed state (upcoming state has been resovled)
     m_passedState.velocity = m_upcomingState.velocity;
     m_passedState.acceleration = m_upcomingState.acceleration;
@@ -111,23 +108,39 @@ void engine::Object::applyState()
 
 void engine::Object::update(float dt)
 {
-    m_encodedPosition = m_Scene.GetBPE().getEncoded(getPosition());
-
-    updateState();
+    setupState();
 
     // m_upcomingState.position = m_passedState.position;
     utils::printVector("PS Pos", m_passedState.position);
-    utils::printVector("PS Vel", m_passedState.velocity);
-    utils::printVector("PS Acl", m_passedState.acceleration);
-    PRINT("---------------------");
     utils::printVector("US Pos", m_upcomingState.position);
+    utils::printVector("GP Pos", getPosition());
     utils::printVector("PS Vel", m_passedState.velocity);
+    utils::printVector("US Vel", m_upcomingState.velocity);
+    utils::printVector("PS Acl", m_passedState.acceleration);
     utils::printVector("US Acl", m_upcomingState.acceleration);
     PRINT("=====================");
 
+    // check collision
+
+    // updating state
     m_upcomingState.acceleration = m_passedState.acceleration;
     m_upcomingState.velocity = m_passedState.velocity + m_upcomingState.acceleration * dt;
     m_upcomingState.position = m_passedState.position + m_upcomingState.velocity * dt;
 
+    switch (m_Scene.GetOutsideLocation(m_upcomingState.position, getRadius()))
+    {
+    case engine::PointOutsideLocation::XPlus:
+    case engine::PointOutsideLocation::XMinus:
+        m_upcomingState.velocity.x = -m_upcomingState.velocity.x;
+        break;
+    case engine::PointOutsideLocation::YMinus:
+    case engine::PointOutsideLocation::YPlus:
+        m_upcomingState.velocity.y = -m_upcomingState.velocity.y;
+        break;
+    }
+
     applyState();
+
+    // currently lags in low fps, position provided is correct
+    // m_encodedPosition = m_Scene.GetBPE().getEncoded(getPosition());
 }

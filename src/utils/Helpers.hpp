@@ -193,9 +193,9 @@ namespace utils
         win.draw(arrow);
     }
 
-    constexpr static sf::Vector2f zeroVector2f = {0, 0};
-    constexpr static sf::Vector2u zeroVector2u = {0, 0};
-    constexpr static sf::Vector2i zeroVector2i = {0, 0};
+    inline constexpr static sf::Vector2f zeroVector2f = {0.f, 0.f};
+    inline constexpr static sf::Vector2u zeroVector2u = {0U, 0U};
+    inline constexpr static sf::Vector2i zeroVector2i = {0, 0};
 }
 
 namespace sf
