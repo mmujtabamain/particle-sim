@@ -12,6 +12,8 @@ namespace lib
 
 namespace engine
 {
+    enum class PointOutsideLocation;
+
     /// @brief Interface to be used by `engine::Object`
     class IScene
     {
@@ -22,11 +24,11 @@ namespace engine
         virtual ~IScene() = default;
 
         // = 0 implies that defination will be provided in overridden class
-        virtual sf::RenderWindow &getWindow() = 0;
-        virtual bool isPointOutsideWindow(const lib::Vector2M &p) const = 0;
+        virtual sf::RenderWindow &GetWindow() = 0;
+        virtual PointOutsideLocation GetOutsideLocation(const lib::Vector2M &p, int padding = 0) const = 0;
 
-        virtual const lib::BinaryPositionEncoder &getBPE() = 0;
+        virtual const lib::BinaryPositionEncoder &GetBPE() = 0;
 
-        virtual void __addDebugDrawables(std::unique_ptr<sf::Drawable> item) = 0;
+        virtual void __AddDebugDrawables(std::unique_ptr<sf::Drawable> item) = 0;
     };
 }

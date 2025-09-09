@@ -83,7 +83,7 @@ uint16_t lib::BinaryPositionEncoder::getEncoded(const lib::Vector2M &point) cons
         __drawRect->setSize(searchRect.size * 2);
 
         if (__scene)
-            __scene->__addDebugDrawables(std::move(__drawRect));
+            __scene->__AddDebugDrawables(std::move(__drawRect));
             // using std::move because copy constructor of unique_ptr is deleted
             // without std::move item is passed in by value we want to just move it
     }

@@ -192,6 +192,10 @@ namespace utils
         win.draw(line);
         win.draw(arrow);
     }
+
+    inline constexpr static sf::Vector2f zeroVector2f = {0.f, 0.f};
+    inline constexpr static sf::Vector2u zeroVector2u = {0U, 0U};
+    inline constexpr static sf::Vector2i zeroVector2i = {0, 0};
 }
 
 namespace sf
@@ -206,7 +210,7 @@ namespace sf
     // subtract Vector2f
     inline sf::Vector2f operator-(const sf::Vector2f &v, float s)
     {
-        return {v.x + s, v.y + s};
+        return {v.x - s, v.y - s};
     }
 
     // add Vector2u
@@ -218,7 +222,7 @@ namespace sf
     // subtract Vector2u
     inline sf::Vector2u operator-(const sf::Vector2u &v, unsigned int s)
     {
-        return {v.x + s, v.y + s};
+        return {v.x - s, v.y - s};
     }
 }
 
