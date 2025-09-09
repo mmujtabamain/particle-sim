@@ -3,7 +3,7 @@
 #include "BinaryPositionEncoder.hpp"
 
 engine::Scene::Scene(const sf::Vector2u &size)
-    : debugFont("assets/cascadia_code.ttf"), m_encoder(size, this)
+    : __debugFont("assets/cascadia_code.ttf"), m_encoder(size, this)
 {
     sf::ContextSettings settings;
     settings.antiAliasingLevel = 16;
@@ -11,16 +11,16 @@ engine::Scene::Scene(const sf::Vector2u &size)
     m_window = sf::RenderWindow(sf::VideoMode(size), "Particle Simulation", sf::Style::Close, sf::State::Windowed, settings);
     m_objects.reserve(128);
 
-    // m_window.setFramerateLimit(60);
+    m_window.setFramerateLimit(5);
     // m_window.setVerticalSyncEnabled(true);
 }
 
-void engine::Scene::startLoop()
+void engine::Scene::StartLoop()
 {
     sf::Clock deltaClock;
 
     sf::Clock __fpsClock;
-    sf::Text __fpsText(debugFont);
+    sf::Text __fpsText(__debugFont);
     __fpsText.setPosition({15, 10});
     __fpsText.setCharacterSize(20);
     __fpsText.setFillColor(sf::Color::White);
@@ -69,21 +69,21 @@ void engine::Scene::startLoop()
         // return is outside window
         if (mousePos.x > 0 && mousePos.x < m_window.getSize().x && mousePos.y > 0 && mousePos.y < m_window.getSize().y)
         {
-            lib::BinaryPositionEncoder encoder(m_window.getSize(), this);
+            // lib::BinaryPositionEncoder encoder(m_window.getSize(), this);
 
-            std::cout << "Mouse Pos Encoded: " << std::bitset<16>(encoder.getEncoded(mousePos)) << "\n";
+            // std::cout << "Mouse Pos Encoded: " << std::bitset<16>(encoder.getEncoded(mousePos)) << "\n";
         }
 
 #if DEBUG == 1
-        for (auto &__drawable : __debugDrawables)
+        for (auto &__drawable : __m_debugDrawables)
         {
             m_window.draw(*__drawable);
         }
 
-        __debugDrawables.clear();
+        __m_debugDrawables.clear();
 
-#endif // DEBUG
         m_window.draw(__fpsText);
+#endif // DEBUG
 
         for (auto &obj : m_objects)
         {
@@ -102,12 +102,12 @@ void appendBit(uint16_t &value, uint8_t bit)
     value |= (bit & 1);
 }
 
-void engine::Scene::addObject(const engine::Object &obj)
+void engine::Scene::AddObject(const engine::Object &obj)
 {
     m_objects.push_back(obj);
 }
 
-void engine::Scene::objectsForEach(const std::function<void(engine::Object &)> &func)
+void engine::Scene::ObjectsForEach(const std::function<void(engine::Object &)> &func)
 {
     for (auto &obj : m_objects)
     {
@@ -115,12 +115,12 @@ void engine::Scene::objectsForEach(const std::function<void(engine::Object &)> &
     }
 }
 
-sf::RenderWindow &engine::Scene::getWindow()
+sf::RenderWindow &engine::Scene::GetWindow()
 {
     return m_window;
 }
 
-bool engine::Scene::isPointOutsideWindow(const lib::Vector2M &p) const
+bool engine::Scene::IsPointOutsideWindow(const lib::Vector2M &p) const
 {
     if (p.x < 0)
     {
@@ -142,14 +142,14 @@ bool engine::Scene::isPointOutsideWindow(const lib::Vector2M &p) const
     return false;
 }
 
-const lib::BinaryPositionEncoder &engine::Scene::getBPE()
+const lib::BinaryPositionEncoder &engine::Scene::GetBPE()
 {
     return m_encoder;
 }
 
-void engine::Scene::__addDebugDrawables(std::unique_ptr<sf::Drawable> item)
+void engine::Scene::__AddDebugDrawables(std::unique_ptr<sf::Drawable> item)
 {
     // using std::move because copy constructor of unique_ptr is deleted
     // without std::move item is passed in by value we want to just move it
-    __debugDrawables.push_back(std::move(item));
+    __m_debugDrawables.push_back(std::move(item));
 }

@@ -206,7 +206,7 @@ namespace sf
     // subtract Vector2f
     inline sf::Vector2f operator-(const sf::Vector2f &v, float s)
     {
-        return {v.x + s, v.y + s};
+        return {v.x - s, v.y - s};
     }
 
     // add Vector2u
@@ -218,7 +218,7 @@ namespace sf
     // subtract Vector2u
     inline sf::Vector2u operator-(const sf::Vector2u &v, unsigned int s)
     {
-        return {v.x + s, v.y + s};
+        return {v.x - s, v.y - s};
     }
 }
 

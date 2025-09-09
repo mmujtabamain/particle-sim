@@ -12,38 +12,47 @@ namespace engine
 {
     struct ObjectState
     {
-        sf::Vector2f position;
-        sf::Vector2f velocity;
-        sf::Vector2f acceleration;
+        sf::Vector2f position{0.f, 0.f};
+        sf::Vector2f velocity{0.f, 0.f};
+        sf::Vector2f acceleration{0.f, 0.f};
     };
 
     class Object
     {
     private: // PRIVATE MEMBERS
-        // at the end of every frame th
-        ObjectState currentState;
+        /// @brief State of previous frame
+        ObjectState m_passedState;
+        /// @brief State of upcoming frame
+        ObjectState m_upcomingState;
 
-        engine::IScene &myScene;
-        sf::RenderWindow &windowRO;
+        sf::CircleShape m_shape;
+        const sf::RenderWindow &m_ro_windowRO;
 
-        uint16_t encodedPosition;
+        engine::IScene &m_Scene;
+
+        uint16_t m_encodedPosition;
 
     public: // GETTERS AND SETTERS
-        const sf::Vector2f &getPosition(bool fromCenter = true);
-        const sf::Vector2f &getVelocity();
+        // Contains no dependency on other getters and setters
+
         float getRadius() const;
 
+        sf::Vector2f getPosition(bool fromCenter = true) const; // no const & explanation in function
         void setPosition(const sf::Vector2f &newPos, bool fromCenter = true);
+
+        const sf::Vector2f &getVelocity();
         void setVelocity(const sf::Vector2f &newVel);
 
-    public: // PUBLIC METHODS
-        sf::CircleShape shape;
+    private: // PRIVATE METHODS
+        void updateState();
+        void applyState();
 
-        Object(engine::IScene &scene, float radius = 5);
+    public: // PUBLIC METHODS
+        Object(engine::IScene &scene, float radius = 2);
+
+        void move(const sf::Vector2f &relativePos, bool fromCenter = true);
 
         void draw(sf::RenderWindow &window);
         void update(float dt);
-
-    private: // PRIVATE METHODS
     };
 }

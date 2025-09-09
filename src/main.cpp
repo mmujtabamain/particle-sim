@@ -6,16 +6,16 @@ int main()
 {
     engine::Scene scene({800, 600});
 
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 1; i++)
     {
         engine::Object obj(scene);
-        obj.shape.setPosition({
-            scene.getWindow().getSize().x / 2.f,
-            scene.getWindow().getSize().y / 2.f //
+        obj.setPosition({
+            scene.GetWindow().getSize().x / 2.f,
+            scene.GetWindow().getSize().y / 2.f //
         });
-        obj.shape.move(utils::getRandomVector(200, i));
-        scene.addObject(obj);
+        // obj.move(utils::getRandomVector(200, i));
+        scene.AddObject(obj);
     }
 
-    scene.startLoop();
+    scene.StartLoop();
 }

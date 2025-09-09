@@ -24,24 +24,24 @@ namespace engine
     private:
         sf::RenderWindow m_window;
         std::vector<engine::Object> m_objects;
-        sf::Font debugFont;
         const lib::BinaryPositionEncoder m_encoder;
+        sf::Font __debugFont;
 
     public:
         Scene() = delete;
         Scene(const sf::Vector2u &size);
 
-        void startLoop();
-        void addObject(const engine::Object &obj);
+        void StartLoop();
+        void AddObject(const engine::Object &obj);
 
-        void objectsForEach(const std::function<void(engine::Object &)> &func);
+        void ObjectsForEach(const std::function<void(engine::Object &)> &func);
 
-        sf::RenderWindow &getWindow() override;
-        bool isPointOutsideWindow(const lib::Vector2M &p) const override;
+        sf::RenderWindow &GetWindow() override;
+        bool IsPointOutsideWindow(const lib::Vector2M &p) const override;
 
-        const lib::BinaryPositionEncoder &getBPE() override;
+        const lib::BinaryPositionEncoder &GetBPE() override;
 
-        std::vector<std::unique_ptr<sf::Drawable>> __debugDrawables;
-        void __addDebugDrawables(std::unique_ptr<sf::Drawable> item) override;
+        std::vector<std::unique_ptr<sf::Drawable>> __m_debugDrawables;
+        void __AddDebugDrawables(std::unique_ptr<sf::Drawable> item) override;
     };
 }
